@@ -1,0 +1,17 @@
+server:
+  port: ${USER_SERVICE_PORT:8080}
+
+spring:
+  datasource:
+    url: ${USER_SERVICE_DB_URL:jdbc:mysql://localhost:3310/oral-it}
+    username: ${USER_SERVICE_DB_USERNAME:root}
+    password: ${USER_SERVICE_DB_PASSWORD:root}
+    maximumPoolSize: ${USER_SERVICE_DB_MAX_POOL:5}
+  jpa:
+    database-platform: ${USER_SERVICE_DB_PLATFORM:org.hibernate.dialect.MySQL8Dialect}
+    hibernate:
+      ddl-auto: ${USER_SERVICE_DB_DDL_AUTO:update} # change to create if you are running first time
+    show-sql: ${USER_SERVICE_DB_SHOW_SQL:false}
+    properties:
+      hibernate:
+        generate_statistics: ${USER_SERVICE_DB_STAT:false}
