@@ -1,6 +1,7 @@
 package io.oralit.usermanagementservice.adapter.inbound;
 
 import io.oralit.usermanagementservice.resource.UserResource;
+import io.oralit.usermanagementservice.service.SchedulerService;
 import io.oralit.usermanagementservice.service.UserManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,9 @@ public class UserManagementController extends AbstractController {
     @Autowired
     private UserManagementService userManagementService;
 
+    @Autowired
+    private SchedulerService schedulerService;
+
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@RequestBody UserResource userResource){
         logger.info("request - registerUser | (URL - /api/v1/user/register)");
@@ -34,6 +38,11 @@ public class UserManagementController extends AbstractController {
         ResponseEntity<Object> responseEntity = sendSuccessResponse(userManagementService.getAllRegisteredUsers());
         logger.info("response - getAllRegisteredUsers | (URL - /api/v1/user/list | Response = {})", responseEntity);
         return responseEntity;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Object> getAllUsers(){
+        return schedulerService.getUsers();
     }
 
 

@@ -7,11 +7,15 @@ import io.oralit.usermanagementservice.repository.UserRepository;
 import io.oralit.usermanagementservice.resource.UserResource;
 import io.oralit.usermanagementservice.util.EmailFormatUtil;
 import io.oralit.usermanagementservice.util.NumberFormatUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -20,6 +24,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserManagementService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private final UserRepository userRepository;
     private final NumberFormatUtil numberFormatUtil;
     private final EmailFormatUtil emailFormatUtil;
@@ -56,4 +63,12 @@ public class UserManagementService {
         List<User> userList = userRepository.findAll();
         return userList.stream().map(user -> new UserResource(user.getMsisdn(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword())).collect(Collectors.toList());
     }
+
+    @Async
+    public CompletableFuture<List<User>> findAllUsers(){
+        logger.info("get list of user by "+Thread.currentThread().getName());
+        List<User> users=userRepository.findAll();
+        return CompletableFuture.completedFuture(users);
+    }
+
 }
