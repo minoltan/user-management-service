@@ -2,7 +2,6 @@ package io.oralit.usermanagementservice.service;
 
 import io.oralit.usermanagementservice.exception.BadRequestException;
 import io.oralit.usermanagementservice.exception.ConflictException;
-import io.oralit.usermanagementservice.exception.NotFoundException;
 import io.oralit.usermanagementservice.model.User;
 import io.oralit.usermanagementservice.repository.UserRepository;
 import io.oralit.usermanagementservice.resource.UserResource;
@@ -53,16 +52,10 @@ public class UserManagementService {
             throw new BadRequestException("Mobile number format is invalid");
         }
 
-
     }
 
     public List<UserResource> getAllRegisteredUsers() {
         List<User> userList = userRepository.findAll();
-        if (!userList.isEmpty()) {
-            return userList.stream().map(user -> new UserResource(user.getMsisdn(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword())).collect(Collectors.toList());
-        } else {
-            throw new NotFoundException("User List is Empty");
-        }
-
+        return userList.stream().map(user -> new UserResource(user.getMsisdn(), user.getFirstName(), user.getLastName(), user.getEmail())).collect(Collectors.toList());
     }
 }

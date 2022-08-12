@@ -41,7 +41,7 @@ public class UserManagementServiceTest {
 
 
     private UserResource prepareUserResource(){
-     return new UserResource("94719542277","Minoltan","Issack","issackpaul95@gmail.com","Test");
+     return new UserResource("94719542277","Minoltan","Issack","issackpaul95@gmail.com");
     }
 
     private User prepareUser(){
