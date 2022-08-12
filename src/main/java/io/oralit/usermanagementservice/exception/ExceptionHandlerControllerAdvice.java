@@ -41,5 +41,18 @@ public class ExceptionHandlerControllerAdvice {
         return response;
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public @ResponseBody
+    Response handleNotFoundException(final NotFoundException exception,
+                                     final HttpServletRequest request) {
+        Response response = new Response();
+        response.setSuccess(false);
+        response.setErrorMessage(exception.getMessage());
+        response.setRequestedURI(request.getRequestURI());
+        response.setStatusInfo(HttpStatus.NOT_FOUND.getReasonPhrase());
+        return response;
+    }
+
 }
 

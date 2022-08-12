@@ -2,20 +2,17 @@ package io.oralit.usermanagementservice.service;
 
 import io.oralit.usermanagementservice.exception.BadRequestException;
 import io.oralit.usermanagementservice.exception.ConflictException;
+import io.oralit.usermanagementservice.exception.NotFoundException;
 import io.oralit.usermanagementservice.model.User;
 import io.oralit.usermanagementservice.repository.UserRepository;
 import io.oralit.usermanagementservice.resource.UserResource;
 import io.oralit.usermanagementservice.util.EmailFormatUtil;
 import io.oralit.usermanagementservice.util.NumberFormatUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserManagementService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserRepository userRepository;
     private final NumberFormatUtil numberFormatUtil;
@@ -45,6 +41,7 @@ public class UserManagementService {
                 if (userRepository.findByMsisdn(userResource.getMsisdn()).isEmpty()) {
                     User user = new User();
                     BeanUtils.copyProperties(userResource, user); // can use set or constructor if the source and target has different values
+                    //Todo: Password need to be Hash while saving
                     userRepository.save(user);
                 } else {
                     throw new ConflictException("User Already exist for this mobile number");
@@ -61,14 +58,11 @@ public class UserManagementService {
 
     public List<UserResource> getAllRegisteredUsers() {
         List<User> userList = userRepository.findAll();
-        return userList.stream().map(user -> new UserResource(user.getMsisdn(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword())).collect(Collectors.toList());
-    }
+        if (!userList.isEmpty()) {
+            return userList.stream().map(user -> new UserResource(user.getMsisdn(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword())).collect(Collectors.toList());
+        } else {
+            throw new NotFoundException("User List is Empty");
+        }
 
-    @Async
-    public CompletableFuture<List<User>> findAllUsers(){
-        logger.info("get list of user by "+Thread.currentThread().getName());
-        List<User> users=userRepository.findAll();
-        return CompletableFuture.completedFuture(users);
     }
-
 }
