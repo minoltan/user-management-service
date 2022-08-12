@@ -15,3 +15,11 @@ spring:
     properties:
       hibernate:
         generate_statistics: ${USER_SERVICE_DB_STAT:false}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${USER_MANAGEMENT_SERVICE_KEYCLOAK_URL:http://localhost:8180}/realms/test/protocol/openid-connect/certs
+
+
+

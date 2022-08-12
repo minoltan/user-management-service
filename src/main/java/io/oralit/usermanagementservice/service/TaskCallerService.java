@@ -1,6 +1,9 @@
-package io.oralit.usermanagementservice.resource;
+package io.oralit.usermanagementservice.service;
 
 
+import io.oralit.usermanagementservice.resource.ChildTaskOne;
+import io.oralit.usermanagementservice.resource.ChildTaskThree;
+import io.oralit.usermanagementservice.resource.ChildTaskTwo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

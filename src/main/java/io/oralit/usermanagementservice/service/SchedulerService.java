@@ -1,17 +1,13 @@
 package io.oralit.usermanagementservice.service;
 
 import io.oralit.usermanagementservice.model.User;
-import io.oralit.usermanagementservice.repository.UserRepository;
-import io.oralit.usermanagementservice.resource.TaskCallerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
