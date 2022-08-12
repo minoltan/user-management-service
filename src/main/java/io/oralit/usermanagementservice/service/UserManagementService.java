@@ -35,6 +35,7 @@ public class UserManagementService {
 
 
     public void registerUser(UserResource userResource) {
+        // Todo: can add java bean validation
         if (numberFormatUtil.validateMsisdnNumberPattern(userResource.getMsisdn())) {
             if (emailFormatUtil.validateEmailPattern(userResource.getEmail())) {
                 if (userRepository.findByMsisdn(userResource.getMsisdn()).isEmpty()) {
