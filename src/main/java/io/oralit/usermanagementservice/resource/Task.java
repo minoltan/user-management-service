@@ -1,6 +1,9 @@
 package io.oralit.usermanagementservice.resource;
 
+import io.oralit.usermanagementservice.adapter.inbound.UserManagementController;
 import io.oralit.usermanagementservice.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.ArrayList;
@@ -10,21 +13,25 @@ import java.util.concurrent.CompletableFuture;
 /**
  * @author Minoltan Issack on 8/11/2022
  */
-public class Task extends Thread{
+public class Task{
+    private final Logger logger = LoggerFactory.getLogger(Task.class);
+
     private String name;
-    List<Task> subTask;
+    List<Task> subTasks;
+    private boolean isComplete;
+
+    public Task(String name, List<Task> subTasks) {
+        this.name = name;
+        this.subTasks = subTasks;
+        this.isComplete = false;
+    }
 
     @Async
-    public CompletableFuture<List<Task>> findAllUsers(){
-        List<CompletableFuture> taskList = new ArrayList<>();
-        for(int i=0; i<subTask.size(); i++){
-            CompletableFuture<Task> users1= CompletableFuture.completedFuture(subTask.get(i));
-            taskList.add(users1);
-        }
-        for(int i=0; i<taskList.size(); i++){
-            CompletableFuture.allOf(taskList.get(i));
-        }
-       return null;
-
+    public CompletableFuture<Task> complete() {
+        logger.info("Task: " + name + " Started");
+        CompletableFuture.allOf(subTasks.stream().map(Task::complete).toArray(CompletableFuture[]::new));
+        this.isComplete = true;
+        logger.info("Task: " + name + " completed");
+        return CompletableFuture.completedFuture(this);
     }
 }
